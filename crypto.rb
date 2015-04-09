@@ -2,13 +2,13 @@
 class Encryptor
 
   def self.run(message, rotation)
-    part1 = ("a".."z").to_a
-    part2 = part1.rotate(rotation)
-    cipher1 = part1.zip(part2)
+    letters = ("a".."z").to_a
+    roto = letters.rotate(rotation)
+    cipher1 = letters.zip(roto)
 
-    part3 = ("A".."Z").to_a
-    part4 = part3.rotate(rotation)
-    cipher2 = part3.zip(part4)
+    caps = ("A".."Z").to_a
+    caps_roto = caps.rotate(rotation)
+    cipher2 = caps.zip(caps_roto)
 
     cipher = Hash[cipher1 + cipher2]
 
@@ -18,7 +18,21 @@ end
 
 class Decryptor
 
+  def self.run(message, rotation)
+    letters = ("a".."z").to_a
+    roto = letters.rotate(-rotation)
+    cipher1 = letters.zip(roto)
+
+    caps = ("A".."Z").to_a
+    caps_roto = caps.rotate(-rotation)
+    cipher2 = caps.zip(caps_roto)
+
+    cipher = Hash[cipher1 + cipher2]
+
+    message.gsub(/[a-zA-Z]/, cipher)
+  end
 end
+
 
 
 class EncryptionEngine
@@ -27,13 +41,17 @@ class EncryptionEngine
     Encryptor.run(message, rotation)
   end
 
+  def decrypt(message, rotation = 13)
+    Decryptor.run(message, rotation)
+  end
+
 end
 
 
-#
-# engine = EncryptionEngine.new
-# output = engine.encrypt ("My Message")
-# puts output  # outputs "Zl Zrffntr"
-# output2 = engine.decrypt("Zl Zrffntr")
-# puts output2 # outputs "My Message"
-
+if __FILE__==$0
+  engine = EncryptionEngine.new
+  output = engine.encrypt ("My Message")
+  puts output  # outputs "Zl Zrffntr"
+  output2 = engine.decrypt("Zl Zrffntr")
+  puts output2 # outputs "My Message"
+end
