@@ -1,18 +1,32 @@
 gem 'minitest'
 require 'minitest/autorun'
+require 'minitest/pride'
 require_relative 'crypto'
 class EncryptionEngineTest < Minitest::Test
 
-  def test_that_A_gives_us_N
-    engine = EncryptionEngine.new
-    output = engine.encrypt("a")
-    assert_equal "n", output
-  end
-
   def test_it_encrypts_using_rot13
-    skip
     engine = EncryptionEngine.new
     output = engine.encrypt("My Message")
     assert_equal "Zl Zrffntr", output
   end
+
+
+  def test_it_decrypts_using_rot13
+    engine = EncryptionEngine.new
+    output = engine.encrypt("Zl Zrffntr")
+    assert_equal "My Message", output
+  end
+
+  def test_it_can_encrypt_using_rot6
+    engine = EncryptionEngine.new
+    output = engine.encrypt("My Message", 6)
+    assert_equal "Se Skyygmk", output
+  end
+
+  def test_it_can_decrypt_using_rot6
+    engine = EncryptionEngine.new
+    output = engine.encrypt("Se Skyygmk", 6)
+    assert_equal "My Message", output
+  end
+
 end
